@@ -1,6 +1,7 @@
 import './style.scss';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import CubeTexture from './textures/test.png';
 
 let colors: number[] = [0x5438dc, 0xBA3B46, 0x99D17B, 0xF4B860, 0x93C0A4, 0xFFCAD4];
 
@@ -15,10 +16,13 @@ const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+let texture: THREE.Texture = new THREE.TextureLoader().load(CubeTexture);
+
+// @ts-ignore
 const controls: OrbitControls = new OrbitControls(camera, renderer.domElement);
 
 let cubeSize: number = 1;
-let cubeSpacing: number = 0.05;
+let cubeSpacing: number = 0;
 let cubeCount: number = 3;
 
 // Create the cubes
@@ -33,12 +37,12 @@ for (let i: number = 0; i < cubeCount; i++) {
 		    let cubeGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
 
       		let cubeMaterials: THREE.MeshBasicMaterial[] = [
-        		new THREE.MeshBasicMaterial({color: colors[0]}),
-        		new THREE.MeshBasicMaterial({color: colors[1]}),
-        		new THREE.MeshBasicMaterial({color: colors[2]}),
-        		new THREE.MeshBasicMaterial({color: colors[3]}),
-        		new THREE.MeshBasicMaterial({color: colors[4]}),
-        		new THREE.MeshBasicMaterial({color: colors[5]})
+        		new THREE.MeshBasicMaterial({color: colors[0], map: texture}),
+        		new THREE.MeshBasicMaterial({color: colors[1], map: texture}),
+        		new THREE.MeshBasicMaterial({color: colors[2], map: texture}),
+        		new THREE.MeshBasicMaterial({color: colors[3], map: texture}),
+        		new THREE.MeshBasicMaterial({color: colors[4], map: texture}),
+        		new THREE.MeshBasicMaterial({color: colors[5], map: texture})
       		];
       
 	  		let cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]> = new THREE.Mesh(cubeGeometry, cubeMaterials);
