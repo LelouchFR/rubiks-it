@@ -27,7 +27,7 @@ let cubeSpacing: number = 0;
 let cubeCount: number = 3;
 
 // Create the cubes
-let cubes: any[] = [];
+let cubes: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[] = [];
 for (let i: number = 0; i < cubeCount; i++) {
 	for (let j: number = 0; j < cubeCount; j++) {
 		for (let k: number = 0; k < cubeCount; k++) {
@@ -56,6 +56,134 @@ for (let i: number = 0; i < cubeCount; i++) {
 }
 
 camera.position.z = 5;
+
+type BoxBasicMesh = THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[];
+
+interface CubeArgs {
+	type: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[];
+	turn: number;
+}
+
+let angle: number = Math.PI / 2;
+
+let leftCubesX: BoxBasicMesh = cubes.filter(cube => cube.position.x < 0);
+let middleCubesX: BoxBasicMesh = cubes.filter(cube => cube.position.x === 0);
+let rightCubesX: BoxBasicMesh = cubes.filter(cube => cube.position.x > 0);
+
+let leftCubesY: BoxBasicMesh = cubes.filter(cube => cube.position.y < 0);
+let middleCubesY: BoxBasicMesh = cubes.filter(cube => cube.position.y === 0);
+let rightCubesY: BoxBasicMesh = cubes.filter(cube => cube.position.y > 0);
+	
+let leftCubesZ: BoxBasicMesh = cubes.filter(cube => cube.position.z < 0);
+let middleCubesZ: BoxBasicMesh = cubes.filter(cube => cube.position.z === 0);
+let rightCubesZ: BoxBasicMesh = cubes.filter(cube => cube.position.z > 0);
+
+function RefreshCubes(): void {
+	leftCubesX = cubes.filter(cube => cube.position.x < 0);
+	middleCubesX = cubes.filter(cube => cube.position.x === 0);
+	rightCubesX = cubes.filter(cube => cube.position.x > 0);
+
+	leftCubesY = cubes.filter(cube => cube.position.y < 0);
+	middleCubesY = cubes.filter(cube => cube.position.y === 0);
+	rightCubesY = cubes.filter(cube => cube.position.y > 0);
+
+	leftCubesZ = cubes.filter(cube => cube.position.z < 0);
+	middleCubesZ = cubes.filter(cube => cube.position.z === 0);
+	rightCubesZ = cubes.filter(cube => cube.position.z > 0);
+}
+
+// @ts-ignore
+function XCubes(Args: CubeArgs): void {
+	const {type, turn} = Args;
+	switch (type) {
+		case leftCubesX:
+			leftCubesX.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(turn, 0, 0), angle);
+			});
+			break;
+		case middleCubesX:
+			middleCubesX.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(turn, 0, 0), angle);
+			});
+			break;
+		case rightCubesX:
+			rightCubesX.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(turn, 0, 0), angle);
+			});
+			break;
+		default:
+			break;
+	}
+	
+	RefreshCubes();
+}
+
+// @ts-ignore
+function YCubes(Args: CubeArgs): void {
+	const {type, turn} = Args;
+	switch (type) {
+		case leftCubesY:
+			leftCubesY.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(0, turn, 0), angle);
+			});
+			break;
+		case middleCubesY:
+			middleCubesY.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(0, turn, 0), angle);
+			});
+			break;
+		case rightCubesY:
+			rightCubesY.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(0, turn, 0), angle);
+			});
+			break;
+		default:
+			break;
+	}
+	
+	RefreshCubes();
+}
+
+// @ts-ignore
+function ZCubes(Args: CubeArgs): void {
+	const {type, turn} = Args;
+	switch (type) {
+		case leftCubesZ:
+			leftCubesZ.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(0, 0, turn), angle);
+			});
+			break;
+		case middleCubesZ:
+			middleCubesZ.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(0, 0, turn), angle);
+			});
+			break;
+		case rightCubesZ:
+			rightCubesZ.forEach(cube => {
+				cube.rotateOnAxis(new THREE.Vector3(0, 0, turn), angle);
+			});
+			break;
+		default:
+			break;
+	}
+
+	RefreshCubes();
+}
+
+// Will be added differently: this is just for test !
+/*
+document.addEventListener("keydown", function(event: KeyboardEvent): void {
+	if (event.code === "ArrowUp") {
+		XCubes({ type: leftCubesX, turn: -1 });
+	} else if (event.code === "ArrowDown") {
+		XCubes({ type: leftCubesX, turn: 1 });
+	} else if (event.code === "ArrowLeft") {
+		YCubes({ type: leftCubesY, turn: -1 });
+	} else if (event.code === "ArrowRight") {
+		YCubes({ type: leftCubesY, turn: 1 });
+	}
+});
+*/
 
 function animate(): void {
 	requestAnimationFrame( animate );
