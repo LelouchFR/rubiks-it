@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import CubeTexture from './textures/test.png';
 
-let colors: number[] = [0x5438dc, 0xBA3B46, 0x99D17B, 0xF4B860, 0x93C0A4, 0xFFCAD4];
+let colors: number[] = [0xEE6055, 0x60D394, 0xAAF683, 0xFFD97D, 0xFF9B85, 0x392F5A];
 
 const scene: THREE.Scene = new THREE.Scene();
 
@@ -13,6 +13,7 @@ const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector("#bg") as HTMLCanvasElement
 });
 
+renderer.setClearColor( 0xECD444, 1 );
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -30,9 +31,9 @@ let cubes: any[] = [];
 for (let i: number = 0; i < cubeCount; i++) {
 	for (let j: number = 0; j < cubeCount; j++) {
 		for (let k: number = 0; k < cubeCount; k++) {
-      		let xPos: number = (i - 1.5) * (cubeSize + cubeSpacing);
-      		let yPos: number = (j - 1.5) * (cubeSize + cubeSpacing);
-      		let zPos: number = (k - 1.5) * (cubeSize + cubeSpacing);
+      		let xPos: number = (i - 1) * (cubeSize + cubeSpacing);
+      		let yPos: number = (j - 1) * (cubeSize + cubeSpacing);
+      		let zPos: number = (k - 1) * (cubeSize + cubeSpacing);
 
 		    let cubeGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
 
@@ -59,11 +60,9 @@ camera.position.z = 5;
 function animate(): void {
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
-	const helper = new THREE.CameraHelper(camera);
-	scene.add(helper);
+	const helper: THREE.CameraHelper = new THREE.CameraHelper(camera);
 	const axesHelper: THREE.AxesHelper = new THREE.AxesHelper(5);
-	scene.add(axesHelper);
+	scene.add(axesHelper, helper);
 }
-
 
 animate();
