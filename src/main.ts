@@ -23,7 +23,6 @@ let texture: THREE.Texture = new THREE.TextureLoader().load(CubeTexture);
 const controls: OrbitControls = new OrbitControls(camera, renderer.domElement);
 
 let cubeSize: number = 1;
-let cubeSpacing: number = 0;
 let cubeCount: number = 3;
 
 // Create the cubes
@@ -31,9 +30,7 @@ let cubes: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[] = [];
 for (let i: number = 0; i < cubeCount; i++) {
 	for (let j: number = 0; j < cubeCount; j++) {
 		for (let k: number = 0; k < cubeCount; k++) {
-      		let xPos: number = (i - 1) * (cubeSize + cubeSpacing);
-      		let yPos: number = (j - 1) * (cubeSize + cubeSpacing);
-      		let zPos: number = (k - 1) * (cubeSize + cubeSpacing);
+      		let [xPos, yPos, zPos]: number[] = [cubeSize * (i - 1), cubeSize * (j - 1), cubeSize * (k - 1)];
 
 		    let cubeGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
 
@@ -60,7 +57,7 @@ camera.position.z = 5;
 type BasicBoxMesh = THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[];
 
 interface CubeArgs {
-	type: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[];
+	type: BasicBoxMesh;
 	turn: number;
 }
 
@@ -88,51 +85,35 @@ function RefreshCubes(): void {
 
 function CubeRotator(Args: CubeArgs): void {
 	const {type, turn} = Args;
+	const [Vec1, Vec2, Vec3] = [new THREE.Vector3(turn, 0, 0), new THREE.Vector3(0, turn, 0), new THREE.Vector3(0, 0, turn)];
+
 	switch (type) {
 		case leftCubesX:
-			leftCubesX.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(turn, 0, 0), angle);
-			});
+			leftCubesX.forEach(cube => cube.rotateOnAxis(Vec1, angle));
 			break;
 		case middleCubesX:
-			middleCubesX.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(turn, 0, 0), angle);
-			});
+			middleCubesX.forEach(cube => cube.rotateOnAxis(Vec1, angle));
 			break;
 		case rightCubesX:
-			rightCubesX.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(turn, 0, 0), angle);
-			});
+			rightCubesX.forEach(cube => cube.rotateOnAxis(Vec1, angle));
 			break;
 		case leftCubesY:
-			leftCubesY.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(0, turn, 0), angle);
-			});
+			leftCubesY.forEach(cube => cube.rotateOnAxis(Vec2, angle));
 			break;
 		case middleCubesY:
-			middleCubesY.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(0, turn, 0), angle);
-			});
+			middleCubesY.forEach(cube => cube.rotateOnAxis(Vec2, angle));
 			break;
 		case rightCubesY:
-			rightCubesY.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(0, turn, 0), angle);
-			});
+			rightCubesY.forEach(cube => cube.rotateOnAxis(Vec2, angle));
 			break;
 		case leftCubesZ:
-			leftCubesZ.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(0, 0, turn), angle);
-			});
+			leftCubesZ.forEach(cube => cube.rotateOnAxis(Vec3, angle));
 			break;
 		case middleCubesZ:
-			middleCubesZ.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(0, 0, turn), angle);
-			});
+			middleCubesZ.forEach(cube => cube.rotateOnAxis(Vec3, angle));
 			break;
 		case rightCubesZ:
-			rightCubesZ.forEach(cube => {
-				cube.rotateOnAxis(new THREE.Vector3(0, 0, turn), angle);
-			});
+			rightCubesZ.forEach(cube => cube.rotateOnAxis(Vec3, angle));
 			break;
 		default:
 			break;
@@ -141,18 +122,18 @@ function CubeRotator(Args: CubeArgs): void {
 	RefreshCubes();
 }
 
-(document.querySelector('#L1') as HTMLElement).onclick = function() {CubeRotator({ type: leftCubesX, turn: -1 })};
-(document.querySelector('#L2') as HTMLElement).onclick = function() {CubeRotator({ type: leftCubesX, turn: 1 })};
-(document.querySelector('#L3') as HTMLElement).onclick = function() {CubeRotator({ type: leftCubesY, turn: 1 })};
-(document.querySelector('#L4') as HTMLElement).onclick = function() {CubeRotator({ type: leftCubesY, turn: -1 })};
-(document.querySelector('#M1') as HTMLElement).onclick = function() {CubeRotator({ type: middleCubesX, turn: -1 })};
-(document.querySelector('#M2') as HTMLElement).onclick = function() {CubeRotator({ type: middleCubesX, turn: 1 })};
-(document.querySelector('#M3') as HTMLElement).onclick = function() {CubeRotator({ type: middleCubesY, turn: 1 })};
-(document.querySelector('#M4') as HTMLElement).onclick = function() {CubeRotator({ type: middleCubesY, turn: -1 })};
-(document.querySelector('#R1') as HTMLElement).onclick = function() {CubeRotator({ type: rightCubesX, turn: -1 })};
-(document.querySelector('#R2') as HTMLElement).onclick = function() {CubeRotator({ type: rightCubesX, turn: 1 })};
-(document.querySelector('#R3') as HTMLElement).onclick = function() {CubeRotator({ type: rightCubesY, turn: 1 })};
-(document.querySelector('#R4') as HTMLElement).onclick = function() {CubeRotator({ type: rightCubesY, turn: -1 })};
+(document.querySelector('#L1') as HTMLElement).onclick = () => CubeRotator({ type: leftCubesX, turn: -1 });
+(document.querySelector('#L2') as HTMLElement).onclick = () => CubeRotator({ type: leftCubesX, turn: 1 });
+(document.querySelector('#L3') as HTMLElement).onclick = () => CubeRotator({ type: leftCubesY, turn: 1 });
+(document.querySelector('#L4') as HTMLElement).onclick = () => CubeRotator({ type: leftCubesY, turn: -1 });
+(document.querySelector('#M1') as HTMLElement).onclick = () => CubeRotator({ type: middleCubesX, turn: -1 });
+(document.querySelector('#M2') as HTMLElement).onclick = () => CubeRotator({ type: middleCubesX, turn: 1 });
+(document.querySelector('#M3') as HTMLElement).onclick = () => CubeRotator({ type: middleCubesY, turn: 1 });
+(document.querySelector('#M4') as HTMLElement).onclick = () => CubeRotator({ type: middleCubesY, turn: -1 });
+(document.querySelector('#R1') as HTMLElement).onclick = () => CubeRotator({ type: rightCubesX, turn: -1 });
+(document.querySelector('#R2') as HTMLElement).onclick = () => CubeRotator({ type: rightCubesX, turn: 1 });
+(document.querySelector('#R3') as HTMLElement).onclick = () => CubeRotator({ type: rightCubesY, turn: 1 });
+(document.querySelector('#R4') as HTMLElement).onclick = () => CubeRotator({ type: rightCubesY, turn: -1 });
 
 function animate(): void {
 	requestAnimationFrame(animate);
