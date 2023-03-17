@@ -1,5 +1,51 @@
+body {
+    overflow: hidden;
+}
+
 canvas#bg {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+ul {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 999;
+    font-size: 3rem;
+    list-style-type: none;
+
+    &.Up {
+        gap: 75px;
+        left: 50%;
+        top: 10px;
+        transform: translate(-50%);
+    }
+
+    &.Down {
+        gap: 75px;
+        left: 50%;
+        bottom: 10px;
+        transform: translate(-50%, 90%);
+    }
+
+    &.Right {
+        display: block;
+        line-height: 100px;
+        right: 10px;
+        top: 50%;
+        transform: translate(90%, -50%);
+    }
+
+    &.Left {
+        display: block;
+        line-height: 100px;
+        left: 10px;
+        top: 50%;
+        transform: translate(90%, -50%);
+    }
 }

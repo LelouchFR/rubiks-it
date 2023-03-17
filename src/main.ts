@@ -57,7 +57,7 @@ for (let i: number = 0; i < cubeCount; i++) {
 
 camera.position.z = 5;
 
-type BoxBasicMesh = THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[];
+type BasicBoxMesh = THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[];
 
 interface CubeArgs {
 	type: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>[];
@@ -66,17 +66,11 @@ interface CubeArgs {
 
 let angle: number = Math.PI / 2;
 
-let leftCubesX: BoxBasicMesh = cubes.filter(cube => cube.position.x < 0);
-let middleCubesX: BoxBasicMesh = cubes.filter(cube => cube.position.x === 0);
-let rightCubesX: BoxBasicMesh = cubes.filter(cube => cube.position.x > 0);
+let leftCubesX: BasicBoxMesh, leftCubesY: BasicBoxMesh, leftCubesZ: BasicBoxMesh;
+let middleCubesX: BasicBoxMesh, middleCubesY: BasicBoxMesh, middleCubesZ: BasicBoxMesh;
+let rightCubesX: BasicBoxMesh, rightCubesY: BasicBoxMesh, rightCubesZ: BasicBoxMesh;
 
-let leftCubesY: BoxBasicMesh = cubes.filter(cube => cube.position.y < 0);
-let middleCubesY: BoxBasicMesh = cubes.filter(cube => cube.position.y === 0);
-let rightCubesY: BoxBasicMesh = cubes.filter(cube => cube.position.y > 0);
-	
-let leftCubesZ: BoxBasicMesh = cubes.filter(cube => cube.position.z < 0);
-let middleCubesZ: BoxBasicMesh = cubes.filter(cube => cube.position.z === 0);
-let rightCubesZ: BoxBasicMesh = cubes.filter(cube => cube.position.z > 0);
+RefreshCubes();
 
 function RefreshCubes(): void {
 	leftCubesX = cubes.filter(cube => cube.position.x < 0);
@@ -92,8 +86,7 @@ function RefreshCubes(): void {
 	rightCubesZ = cubes.filter(cube => cube.position.z > 0);
 }
 
-// @ts-ignore
-function XCubes(Args: CubeArgs): void {
+function CubeRotator(Args: CubeArgs): void {
 	const {type, turn} = Args;
 	switch (type) {
 		case leftCubesX:
@@ -111,17 +104,6 @@ function XCubes(Args: CubeArgs): void {
 				cube.rotateOnAxis(new THREE.Vector3(turn, 0, 0), angle);
 			});
 			break;
-		default:
-			break;
-	}
-	
-	RefreshCubes();
-}
-
-// @ts-ignore
-function YCubes(Args: CubeArgs): void {
-	const {type, turn} = Args;
-	switch (type) {
 		case leftCubesY:
 			leftCubesY.forEach(cube => {
 				cube.rotateOnAxis(new THREE.Vector3(0, turn, 0), angle);
@@ -137,17 +119,6 @@ function YCubes(Args: CubeArgs): void {
 				cube.rotateOnAxis(new THREE.Vector3(0, turn, 0), angle);
 			});
 			break;
-		default:
-			break;
-	}
-	
-	RefreshCubes();
-}
-
-// @ts-ignore
-function ZCubes(Args: CubeArgs): void {
-	const {type, turn} = Args;
-	switch (type) {
 		case leftCubesZ:
 			leftCubesZ.forEach(cube => {
 				cube.rotateOnAxis(new THREE.Vector3(0, 0, turn), angle);
@@ -166,28 +137,26 @@ function ZCubes(Args: CubeArgs): void {
 		default:
 			break;
 	}
-
+	
 	RefreshCubes();
 }
 
-// Will be added differently: this is just for test !
-/*
-document.addEventListener("keydown", function(event: KeyboardEvent): void {
-	if (event.code === "ArrowUp") {
-		XCubes({ type: leftCubesX, turn: -1 });
-	} else if (event.code === "ArrowDown") {
-		XCubes({ type: leftCubesX, turn: 1 });
-	} else if (event.code === "ArrowLeft") {
-		YCubes({ type: leftCubesY, turn: -1 });
-	} else if (event.code === "ArrowRight") {
-		YCubes({ type: leftCubesY, turn: 1 });
-	}
-});
-*/
+(document.querySelector('#L1') as HTMLElement).onclick = function() {CubeRotator({ type: leftCubesX, turn: -1 })};
+(document.querySelector('#L2') as HTMLElement).onclick = function() {CubeRotator({ type: leftCubesX, turn: 1 })};
+(document.querySelector('#L3') as HTMLElement).onclick = function() {CubeRotator({ type: leftCubesY, turn: 1 })};
+(document.querySelector('#L4') as HTMLElement).onclick = function() {CubeRotator({ type: leftCubesY, turn: -1 })};
+(document.querySelector('#M1') as HTMLElement).onclick = function() {CubeRotator({ type: middleCubesX, turn: -1 })};
+(document.querySelector('#M2') as HTMLElement).onclick = function() {CubeRotator({ type: middleCubesX, turn: 1 })};
+(document.querySelector('#M3') as HTMLElement).onclick = function() {CubeRotator({ type: middleCubesY, turn: 1 })};
+(document.querySelector('#M4') as HTMLElement).onclick = function() {CubeRotator({ type: middleCubesY, turn: -1 })};
+(document.querySelector('#R1') as HTMLElement).onclick = function() {CubeRotator({ type: rightCubesX, turn: -1 })};
+(document.querySelector('#R2') as HTMLElement).onclick = function() {CubeRotator({ type: rightCubesX, turn: 1 })};
+(document.querySelector('#R3') as HTMLElement).onclick = function() {CubeRotator({ type: rightCubesY, turn: 1 })};
+(document.querySelector('#R4') as HTMLElement).onclick = function() {CubeRotator({ type: rightCubesY, turn: -1 })};
 
 function animate(): void {
-	requestAnimationFrame( animate );
-	renderer.render( scene, camera );
+	requestAnimationFrame(animate);
+	renderer.render(scene, camera);
 	const helper: THREE.CameraHelper = new THREE.CameraHelper(camera);
 	const axesHelper: THREE.AxesHelper = new THREE.AxesHelper(5);
 	scene.add(axesHelper, helper);
