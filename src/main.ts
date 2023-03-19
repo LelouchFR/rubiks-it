@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import CubeTexture from './textures/test.png';
 
-let colors: number[] = [0xEE6055, 0x60D394, 0xAAF683, 0xFFD97D, 0xFF9B85, 0x392F5A];
+let colors: number[] = [0xFF521B, 0xC3423F, 0xF5E6E8, 0xFDE74C, 0x5BC0EB, 0x9BC53D];
 
 const scene: THREE.Scene = new THREE.Scene();
 
@@ -138,6 +138,7 @@ function CubeRotator(Args: CubeArgs): void {
 function animate(): void {
 	requestAnimationFrame(animate);
 	renderer.render(scene, camera);
+	RefreshCubes();
 	const helper: THREE.CameraHelper = new THREE.CameraHelper(camera);
 	const axesHelper: THREE.AxesHelper = new THREE.AxesHelper(5);
 	scene.add(axesHelper, helper);
