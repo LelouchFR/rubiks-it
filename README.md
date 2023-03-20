@@ -10,6 +10,19 @@ I've got this idea by searching in my room for something I used to play with whe
 
 I wanted to make it possible to play with one virtually. So I came up with the idea of using [Three.js](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene) for this project because I already had some experience with it in the past with my other Open-Source project [cosmic-adventure](https://github.com/LelouchFR/cosmic-adventure).
 
+
+## Dependencies
+
+[Three.js](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)
+> `npm install three`
+
+[Scss](https://sass-lang.com/)
+> `npm install sass`
+
+For the project to work: you will also need [NodeJs](https://nodejs.org/en) installed.
+
+The project turn using the vite vanilla-ts
+
 ## How is it working
 
 ### 1. The colors of the cube
